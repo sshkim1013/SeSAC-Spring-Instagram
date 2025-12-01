@@ -38,7 +38,7 @@ public class User extends BaseEntity {
     private String bio; // 자기소개 적는 공간
 
     @Builder
-    public User(String username, String password, String email, Role role, String bio) {
+    public User(String username, String password, String email, String name, Role role, String bio) {
         this.username = username;
         this.password = password;
         this.email = email;
