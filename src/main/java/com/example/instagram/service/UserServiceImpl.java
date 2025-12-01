@@ -24,10 +24,15 @@ public class UserServiceImpl implements UserService {
                 .email(signUpRequest.getEmail())
                 .name(signUpRequest.getName())
                 .role(Role.USER)
-                .password(passwordEncoder.encode("1234"))
+                .password(passwordEncoder.encode(signUpRequest.getPassword()))
                 .build();
 
         return userRepository.save(user);
+    }
+
+    @Override
+    public boolean existByUsername(String username) {
+        return userRepository.existsByUsername(username);
     }
 
 }
