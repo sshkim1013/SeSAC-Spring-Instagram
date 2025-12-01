@@ -1,0 +1,49 @@
+package com.example.instagram.entity;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Entity
+@Table(name = "users")
+@Getter
+@Setter
+@NoArgsConstructor
+public class User extends BaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, unique = true, length = 30)
+    private String username;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
+    private String email;
+
+    @Column(nullable = false)
+    private Role role;
+
+    @Column(length = 200)
+    private String bio; // 자기소개 적는 공간
+
+    @Builder
+    public User(String username, String password, String email, Role role, String bio) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role != null ? role : Role.USER;    // 기본 값을 USER로 가져 간다.
+        this.bio = bio;
+    }
+
+}
