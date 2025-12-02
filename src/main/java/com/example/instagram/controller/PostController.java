@@ -23,7 +23,6 @@ public class PostController {
 
     private final PostService postService;
 
-
     @GetMapping("/new")
     public String createForm(Model model) {
         model.addAttribute("postCreateRequest", new PostCreateRequest());

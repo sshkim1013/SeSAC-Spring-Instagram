@@ -30,6 +30,7 @@ public class PostServiceImpl implements PostService {
                 .build();
 
         Post savedPost = postRepository.save(post);
+
         return PostResponse.from(savedPost);
     }
 
