@@ -35,4 +35,10 @@ public class UserServiceImpl implements UserService {
         return userRepository.existsByUsername(username);
     }
 
+    @Override
+    public User findById(Long userId) {
+        return userRepository.findById(userId)
+            .orElseThrow();
+    }
+
 }
