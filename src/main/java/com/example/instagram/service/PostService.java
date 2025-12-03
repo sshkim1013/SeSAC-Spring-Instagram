@@ -17,4 +17,6 @@ public interface PostService {
 
     List<PostResponse> getPostsByUsername(String username);
 
+    long countByUserId(Long userId);
+
 }

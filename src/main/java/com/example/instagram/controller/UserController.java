@@ -37,6 +37,9 @@ public class UserController {
         model.addAttribute("profile", profile);
         model.addAttribute("posts", posts);
 
+        boolean isFollowing = followService.isFollowing(userDetails.getId(), profile.getId());
+        model.addAttribute("isFollowing", isFollowing);
+
         return "user/profile";
     }
 

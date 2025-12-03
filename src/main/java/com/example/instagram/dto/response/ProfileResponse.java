@@ -21,12 +21,26 @@ public class ProfileResponse {
     // Entity => Dto
     public static ProfileResponse from(User user) {
         return ProfileResponse.builder()
+            .id(user.getId())
             .username(user.getUsername())
             .bio(user.getBio())
             .name(user.getName())
             .postCount(0)
             .followerCount(0)
             .followingCount(0)
+            .build();
+    }
+
+    // from 오버로딩
+    public static ProfileResponse from(User user, long postCount, long followerCount, long followingCount) {
+        return ProfileResponse.builder()
+            .id(user.getId())
+            .username(user.getUsername())
+            .bio(user.getBio())
+            .name(user.getName())
+            .postCount(postCount)
+            .followerCount(followerCount)
+            .followingCount(followingCount)
             .build();
     }
 
