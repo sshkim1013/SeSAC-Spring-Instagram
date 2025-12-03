@@ -2,6 +2,7 @@ package com.example.instagram.service;
 
 import com.example.instagram.dto.request.CommentCreateRequest;
 import com.example.instagram.dto.response.CommentResponse;
+import java.util.List;
 
 public interface CommentService {
 
@@ -10,5 +11,7 @@ public interface CommentService {
          CommentCreateRequest commentCreateRequest,
          Long userId
      );
+
+    List<CommentResponse> getComments(Long postId);
 
 }

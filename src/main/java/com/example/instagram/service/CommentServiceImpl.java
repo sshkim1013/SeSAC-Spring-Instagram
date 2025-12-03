@@ -6,6 +6,8 @@ import com.example.instagram.entity.Comment;
 import com.example.instagram.entity.Post;
 import com.example.instagram.entity.User;
 import com.example.instagram.repository.CommentRepository;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +40,13 @@ public class CommentServiceImpl implements CommentService {
         Comment savedComment = commentRepository.save(comment);
 
         return CommentResponse.from(savedComment);
+    }
+
+    @Override
+    public List<CommentResponse> getComments(Long postId) {
+        return commentRepository.findByPostIdOrderByCreatedAtDesc(postId).stream()
+                .map(CommentResponse::from)
+                .collect(Collectors.toList());
     }
 
 }
