@@ -37,13 +37,17 @@ public class User extends BaseEntity {
     @Column(length = 200)
     private String bio; // 자기소개 적는 공간
 
+    @Column(length = 20)
+    private String name;
+
     @Builder
     public User(String username, String password, String email, String name, Role role, String bio) {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.role = role != null ? role : Role.USER;    // 기본 값을 USER로 가져 간다.
+        this.role = role != null ? role : Role.USER;    // 기본 값을 Role.USER로 가져 간다.
         this.bio = bio;
+        this.name = name;
     }
 
 }

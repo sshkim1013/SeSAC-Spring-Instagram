@@ -15,4 +15,6 @@ public interface PostService {
 
     List<PostResponse> getAllPosts();
 
+    List<PostResponse> getPostsByUsername(String username);
+
 }
