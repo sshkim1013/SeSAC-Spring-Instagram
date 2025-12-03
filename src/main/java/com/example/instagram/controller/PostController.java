@@ -57,7 +57,8 @@ public class PostController {
     @GetMapping("/{id}")
     public String detail(
         @PathVariable Long id,
-        Model model
+        Model model,
+        @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
         PostResponse post = postService.getPost(id);
 
@@ -66,6 +67,8 @@ public class PostController {
         model.addAttribute("post", post);
         model.addAttribute("commentRequest", new CommentRequest());
         model.addAttribute("comments", comments);
+        model.addAttribute("liked", likeService.isLiked(id, userDetails.getId()));
+        model.addAttribute("likeCount", likeService.getLikeCount(id));
 
         return "post/detail";
     }
