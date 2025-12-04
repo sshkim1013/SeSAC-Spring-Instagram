@@ -19,4 +19,6 @@ public interface PostService {
 
     long countByUserId(Long userId);
 
+    List<PostResponse> getAllPostsWithStats();
+
 }
