@@ -18,11 +18,11 @@ public class FollowServiceImpl implements FollowService {
 
     @Override
     @Transactional
-    public void toggleFollow(Long followingId, String followerUsername) {
-        User following = userService.findById(followingId);
-        User follower = userService.findByUsername(followerUsername);
+    public void toggleFollow(Long followerId, String followingUsername) {
+        User follower = userService.findById(followerId);
+        User following = userService.findByUsername(followingUsername);
 
-        if (following.getId().equals(follower.getId())) {
+        if (follower.getId().equals(following.getId())) {
             throw new RuntimeException("자기 자신은 팔로우할 수 없습니다.");
         }
 
