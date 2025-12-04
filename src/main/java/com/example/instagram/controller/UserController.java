@@ -40,6 +40,10 @@ public class UserController {
         boolean isFollowing = followService.isFollowing(userDetails.getId(), profile.getId());
         model.addAttribute("isFollowing", isFollowing);
 
+        // userDetails.getUsername() : 현재 로그인한 유저의 이름
+        boolean isOwner = userDetails.getUsername().equals(username);
+        model.addAttribute("isOwner", isOwner);
+
         return "user/profile";
     }
 

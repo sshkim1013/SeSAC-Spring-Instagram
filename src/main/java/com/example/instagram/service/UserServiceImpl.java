@@ -2,6 +2,7 @@ package com.example.instagram.service;
 
 import com.example.instagram.dto.request.SignUpRequest;
 import com.example.instagram.dto.response.ProfileResponse;
+import com.example.instagram.dto.response.UserResponse;
 import com.example.instagram.entity.Role;
 import com.example.instagram.entity.User;
 import com.example.instagram.repository.FollowRepository;
@@ -64,6 +65,12 @@ public class UserServiceImpl implements UserService {
     public User findByUsername(String username) {
         return userRepository.findByUsername(username)
             .orElseThrow();
+    }
+
+    @Override
+    public UserResponse getUserById(Long userId) {
+        User user = findById(userId);
+        return UserResponse.from(user);
     }
 
 }
