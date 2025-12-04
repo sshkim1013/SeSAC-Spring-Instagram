@@ -18,6 +18,7 @@ public class PostResponse {
     // User 내부의 정보
     private Long userId;
     private String username;
+    private String profileImageUrl;
 
     private long commentCount;
     private long likeCount;
@@ -31,6 +32,7 @@ public class PostResponse {
                 .imageUrl(post.getImageUrl())
                 .userId(post.getUser().getId())
                 .username(post.getUser().getUsername())
+                .profileImageUrl(post.getUser().getProfileImageUrl())
                 .likeCount(0)
                 .commentCount(0)
                 .build();
@@ -39,15 +41,16 @@ public class PostResponse {
     // from 오버로딩
     public static PostResponse from(Post post, long commentCount, long likeCount) {
         return PostResponse.builder()
-            .id(post.getId())
-            .content(post.getContent())
-            .createdAt(post.getCreatedAt())
-            .imageUrl(post.getImageUrl())
-            .userId(post.getUser().getId())
-            .username(post.getUser().getUsername())
-            .likeCount(likeCount)
-            .commentCount(commentCount)
-            .build();
+                .id(post.getId())
+                .content(post.getContent())
+                .createdAt(post.getCreatedAt())
+                .imageUrl(post.getImageUrl())
+                .userId(post.getUser().getId())
+                .username(post.getUser().getUsername())
+                .profileImageUrl(post.getUser().getProfileImageUrl())
+                .likeCount(likeCount)
+                .commentCount(commentCount)
+                .build();
     }
 
 }

@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +25,7 @@ public class UserServiceImpl implements UserService {
     private final PostRepository postRepository;
     // private final FollowService followService;
     private final FollowRepository followRepository;
+    private final FileService fileService;
 
     @Override
     @Transactional
@@ -76,8 +78,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void updateProfile(Long userId, ProfileUpdateRequest profileUpdateRequest) {
+    public void updateProfile(Long userId, ProfileUpdateRequest profileUpdateRequest, MultipartFile profileImg) {
         User user = findById(userId);
+
+        // 프로필 이미지 처리
+        if (profileImg != null && !profileImg.isEmpty()) {
+            String savedFilename = fileService.saveFile(profileImg);
+            String imageUrl = "/uploads/" + savedFilename;
+            user.updateProfileImage(imageUrl);
+        }
+
         user.updateProfile(profileUpdateRequest.getName(), profileUpdateRequest.getBio());
     }
 
