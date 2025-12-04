@@ -38,4 +38,23 @@ public class ProfileController {
         return "profile/edit";
     }
 
+    @PostMapping("/edit")
+    public String edit(
+        @Valid @ModelAttribute ProfileUpdateRequest profileUpdateRequest,
+        BindingResult bindingResult,
+        @AuthenticationPrincipal CustomUserDetails userDetails,
+        Model model
+    ) {
+        if (bindingResult.hasErrors()) {
+            UserResponse currentUser = userService.getUserById(userDetails.getId());
+            model.addAttribute("currentUser", currentUser);
+            return "profile/edit";
+        }
+
+        // 문제가 발생하지 않는다면 유저 정보를 수정한다.
+        userService.updateProfile(userDetails.getId(), profileUpdateRequest);
+
+        return "redirect:/users/" + userDetails.getUsername();
+    }
+
 }

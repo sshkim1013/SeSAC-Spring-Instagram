@@ -1,5 +1,6 @@
 package com.example.instagram.service;
 
+import com.example.instagram.dto.request.ProfileUpdateRequest;
 import com.example.instagram.dto.request.SignUpRequest;
 import com.example.instagram.dto.response.ProfileResponse;
 import com.example.instagram.dto.response.UserResponse;
@@ -71,6 +72,13 @@ public class UserServiceImpl implements UserService {
     public UserResponse getUserById(Long userId) {
         User user = findById(userId);
         return UserResponse.from(user);
+    }
+
+    @Override
+    @Transactional
+    public void updateProfile(Long userId, ProfileUpdateRequest profileUpdateRequest) {
+        User user = findById(userId);
+        user.updateProfile(profileUpdateRequest.getName(), profileUpdateRequest.getBio());
     }
 
 }
