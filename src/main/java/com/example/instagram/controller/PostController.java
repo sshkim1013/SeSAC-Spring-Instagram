@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequiredArgsConstructor
@@ -40,7 +42,8 @@ public class PostController {
     public String create(
         @Valid @ModelAttribute PostCreateRequest postCreateRequest,
         BindingResult bindingResult,
-        @AuthenticationPrincipal CustomUserDetails userDetails
+        @AuthenticationPrincipal CustomUserDetails userDetails,
+        @RequestParam(value = "image", required = false) MultipartFile image
     ) {
         // postCreateRequest 클래스의 content 필드에
         // 0자 또는 1000자 이상이 들어간 경우
@@ -49,7 +52,7 @@ public class PostController {
         }
 
         // UserDetails 객체에서 user의 id를 가져 온다.
-        postService.create(postCreateRequest, userDetails.getId());
+        postService.create(postCreateRequest, image, userDetails.getId());
 
         return "redirect:/";
     }
@@ -87,7 +90,6 @@ public class PostController {
 
             model.addAttribute("post", post);
             model.addAttribute("comments", comments);
-//            model.addAttribute("commentRequest", commentRequest);
 
             return "post/detail";
         }

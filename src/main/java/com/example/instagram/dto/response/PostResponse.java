@@ -13,6 +13,7 @@ public class PostResponse {
     private Long id;
     private String content;
     private LocalDateTime createdAt;
+    private String imageUrl;
 
     // User 내부의 정보
     private Long userId;
@@ -27,6 +28,7 @@ public class PostResponse {
                 .id(post.getId())
                 .content(post.getContent())
                 .createdAt(post.getCreatedAt())
+                .imageUrl(post.getImageUrl())
                 .userId(post.getUser().getId())
                 .username(post.getUser().getUsername())
                 .likeCount(0)
@@ -40,6 +42,7 @@ public class PostResponse {
             .id(post.getId())
             .content(post.getContent())
             .createdAt(post.getCreatedAt())
+            .imageUrl(post.getImageUrl())
             .userId(post.getUser().getId())
             .username(post.getUser().getUsername())
             .likeCount(likeCount)

@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -22,15 +23,25 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final LikeRepository likeRepository;
     private final CommentRepository commentRepository;
+    private final FileService fileService;
 
     @Override
     @Transactional
-    public PostResponse create(PostCreateRequest postCreateRequest, Long userId) {
+    public PostResponse create(PostCreateRequest postCreateRequest, MultipartFile image, Long userId) {
         User user = userService.findById(userId);
+
+        // 파일을 저장 => 경로
+        String imageUrl = null;
+
+        if (image != null && !image.isEmpty()) {
+            String fileName = fileService.saveFile(image);
+            imageUrl = "/uploads/" + fileName;
+        }
 
         Post post = Post.builder()
                 .content(postCreateRequest.getContent())
                 .user(user)
+                .imageUrl(imageUrl)
                 .build();
 
         Post savedPost = postRepository.save(post);
