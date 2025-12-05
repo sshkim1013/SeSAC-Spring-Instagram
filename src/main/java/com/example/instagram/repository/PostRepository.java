@@ -25,7 +25,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     // 피드 조회(무한 스크롤)
     // 팔로우한 사람들에 대한 게시물만 조회
-    @Query("SELECT p FROM Post p JOIN FETCH p.user WHERE p.user.id IN : userIds ORDER BY p.createdAt DESC")
+    @Query("SELECT p FROM Post p JOIN FETCH p.user WHERE p.user.id IN :userIds ORDER BY p.createdAt DESC")
     Slice<Post> findFeedPostsByUserIds(@Param("userIds") List<Long> userIds, Pageable pageable);
 
     // 전체 게시물 조회(페이징)
