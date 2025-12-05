@@ -6,7 +6,9 @@ import com.example.instagram.service.PostService;
 import com.example.instagram.service.UserService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,9 +30,11 @@ public class SearchApiController {
     }
 
     @GetMapping("/posts")
-    public Slice<PostResponse> searchPosts() {
-
+    public Slice<PostResponse> searchPosts(
+        @RequestParam String q,
+        @PageableDefault(size = 12)Pageable pageable
+    ) {
+        return postService.searchPosts(q.trim(), pageable);
     }
-
 
 }
