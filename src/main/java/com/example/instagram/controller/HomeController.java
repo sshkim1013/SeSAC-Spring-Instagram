@@ -28,4 +28,9 @@ public class HomeController {
         return "home";
     }
 
+    @GetMapping("/explore")
+    public String explore() {
+        return "explore";
+    }
+
 }
