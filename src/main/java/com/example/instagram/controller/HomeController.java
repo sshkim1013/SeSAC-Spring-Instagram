@@ -33,4 +33,9 @@ public class HomeController {
         return "explore";
     }
 
+    @GetMapping("/search")
+    public String search() {
+        return "search";
+    }
+
 }
