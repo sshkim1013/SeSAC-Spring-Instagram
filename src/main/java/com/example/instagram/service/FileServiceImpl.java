@@ -1,5 +1,7 @@
 package com.example.instagram.service;
 
+import com.example.instagram.exception.BusinessException;
+import com.example.instagram.exception.ErrorCode;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,7 +32,8 @@ public class FileServiceImpl implements FileService {
 
             // 허용된 확장자가 아니라면 예외를 발생.
             if (!ALLOWED_EXTENSIONS.contains(extension.toLowerCase())) {
-                throw new RuntimeException("Invalid file extension");
+                // throw new RuntimeException("Invalid file extension");
+                throw new BusinessException(ErrorCode.INVALID_FILE_TYPE);
             }
 
             Path uploadPath = Paths.get(uploadDir);
