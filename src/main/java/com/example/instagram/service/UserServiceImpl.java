@@ -9,6 +9,7 @@ import com.example.instagram.entity.User;
 import com.example.instagram.repository.FollowRepository;
 import com.example.instagram.repository.PostRepository;
 import com.example.instagram.repository.UserRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -89,6 +90,12 @@ public class UserServiceImpl implements UserService {
         }
 
         user.updateProfile(profileUpdateRequest.getName(), profileUpdateRequest.getBio());
+    }
+
+    @Override
+    public List<UserResponse> searchUsers(String keyword) {
+        List<User> users = userRepository.searchByKeyword(keyword);
+
     }
 
 }
