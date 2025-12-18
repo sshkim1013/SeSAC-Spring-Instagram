@@ -5,6 +5,7 @@ import com.example.instagram.dto.request.PostCreateRequest;
 import com.example.instagram.dto.response.CommentResponse;
 import com.example.instagram.dto.response.PostResponse;
 import com.example.instagram.security.CustomUserDetails;
+import com.example.instagram.service.BookmarkService;
 import com.example.instagram.service.CommentService;
 import com.example.instagram.service.LikeService;
 import com.example.instagram.service.PostService;
@@ -31,6 +32,7 @@ public class PostController {
     private final PostService postService;
     private final CommentService commentService;
     private final LikeService likeService;
+    private final BookmarkService bookmarkService;
 
     @GetMapping("/new")
     public String createForm(Model model) {
@@ -72,6 +74,8 @@ public class PostController {
         model.addAttribute("comments", comments);
         model.addAttribute("liked", likeService.isLiked(id, userDetails.getId()));
         model.addAttribute("likeCount", likeService.getLikeCount(id));
+        model.addAttribute("bookmarked", bookmarkService.isBookmarked(id, userDetails.getId()));
+        model.addAttribute("bookmarkCount", bookmarkService.getBookmarkCount(id));
 
         return "post/detail";
     }
@@ -100,16 +104,6 @@ public class PostController {
         commentService.create(postId, commentRequest, userDetails.getId());
 
         return "redirect:/posts/" + postId;
-    }
-
-    @PostMapping("/{id}/like")
-    public String toggleLike(   // 좋아요 버튼 클릭 시, 좋아요 실행 또는 취소 상태
-        @PathVariable Long id,
-        @AuthenticationPrincipal CustomUserDetails userDetails
-    ) {
-        // 게시글 ID, 유저 ID
-        likeService.toggleLike(id, userDetails.getId());
-        return "redirect:/posts/" + id;
     }
 
 }
