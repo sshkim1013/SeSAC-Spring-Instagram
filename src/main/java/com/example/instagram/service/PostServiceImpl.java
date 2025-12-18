@@ -135,7 +135,7 @@ public class PostServiceImpl implements PostService {
     public Slice<PostResponse> searchPosts(String keyword, Pageable pageable) {
         Slice<Post> posts = postRepository.searchByKeyword(keyword, pageable);
 
-        List<PostResponse> content = posts.getContent().stream()
+        List<PostResponse> contents = posts.getContent().stream()
                 .map(post -> {
                     long likeCount = likeRepository.countByPostId(post.getId());
                     long commentCount = commentRepository.countByPostId(post.getId());
@@ -144,7 +144,7 @@ public class PostServiceImpl implements PostService {
                 })
                 .toList();
 
-        return new SliceImpl<>(content, pageable, posts.hasNext());
+        return new SliceImpl<>(contents, pageable, posts.hasNext());
     }
 
 }
