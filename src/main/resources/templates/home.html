@@ -59,8 +59,11 @@
 
       // 게시물 HTML 생성
       function createPostHTML(post) {
+        const likedClass = post.liked ? 'bi-heart-fill text-danger' : 'bi-heart';
+        const bookmarkedClass = post.bookmarked ? 'bi-bookmark-fill' : 'bi-bookmark';
+
         return `
-                <div class="card mb-3">
+                <div class="card mb-3" id="post-${post.id}">
                     <div class="card-header bg-white d-flex align-items-center">
                         <a href="/users/${post.username}" class="text-decoration-none text-dark d-flex align-items-center">
                             <img src="${post.profileImageUrl || '/uploads/default-profile.png'}"
@@ -73,15 +76,22 @@
                         <img src="${post.imageUrl}" class="card-img-top" alt="게시물 이미지">
                     ` : ''}
                     <div class="card-body">
-                        <div class="mb-2">
-                            <button class="btn btn-link text-dark p-0 me-2" onclick="toggleLike(${post.id}, this)">
-                                <i class="bi bi-heart fs-5"></i>
+                        <div class="d-flex justify-content-between">
+                          <div>
+                              <button class="btn btn-link text-dark p-0 me-2" onclick="toggleLike(${post.id}, this)">
+                                  <i class="bi ${likedClass} fs-5"></i>
+                              </button>
+                              <a href="/posts/${post.id}" class="btn btn-link text-dark p-0">
+                                  <i class="bi bi-chat fs-5"></i>
+                              </a>
+                          </div>
+                          <div>
+                            <button class="btn btn-link text-dark p-0" onclick="toggleBookmark(${post.id}, this)">
+                                <i class="bi ${bookmarkedClass} fs-5"></i>
                             </button>
-                            <a href="/posts/${post.id}" class="btn btn-link text-dark p-0">
-                                <i class="bi bi-chat fs-5"></i>
-                            </a>
+                          </div>
                         </div>
-                        <div class="fw-bold mb-1">좋아요 ${post.likeCount}개</div>
+                        <div class="fw-bold mb-1">좋아요 <span class="like-count">${post.likeCount}</span>개</div>
                         <div>
                             <a href="/users/${post.username}" class="fw-bold text-dark text-decoration-none">${post.username}</a>
                             <span>${post.content || ''}</span>
@@ -166,7 +176,7 @@
     // 좋아요 토글 (전역 함수)
     async function toggleLike(postId, button) {
       try {
-        const response = await fetch(`/posts/${postId}/like`, {
+        const response = await fetch(`/api/posts/${postId}/like`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -175,13 +185,38 @@
 
         if (response.ok) {
           const icon = button.querySelector('i');
-          icon.classList.toggle('bi-heart');
+          const isLiked = icon.classList.toggle('bi-heart');
           icon.classList.toggle('bi-heart-fill');
           icon.classList.toggle('text-danger');
+
+          const postCard = document.getElementById(`post-${postId}`);
+          const likeCountSpan = postCard.querySelector('.like-count');
+          let likeCount = parseInt(likeCountSpan.textContent);
+          likeCountSpan.textContent = isLiked ? likeCount - 1 : likeCount + 1;
         }
       } catch (error) {
         console.error('Failed to toggle like:', error);
       }
+    }
+
+    // 북마크 토글 (전역 함수)
+    async function toggleBookmark(postId, button) {
+        try {
+            const response = await fetch(`/api/posts/${postId}/bookmark`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                const icon = button.querySelector('i');
+                icon.classList.toggle('bi-bookmark');
+                icon.classList.toggle('bi-bookmark-fill');
+            }
+        } catch (error) {
+            console.error('Failed to toggle bookmark:', error);
+        }
     }
   </script>
 </div>

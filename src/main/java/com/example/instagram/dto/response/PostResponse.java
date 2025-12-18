@@ -22,6 +22,10 @@ public class PostResponse {
 
     private long commentCount;
     private long likeCount;
+    private long bookmarkCount;
+
+    private boolean liked;
+    private boolean bookmarked;
 
     // Entity => Dto 변환
     public static PostResponse from(Post post) {
@@ -39,7 +43,7 @@ public class PostResponse {
     }
 
     // from 오버로딩
-    public static PostResponse from(Post post, long commentCount, long likeCount) {
+    public static PostResponse from(Post post, long commentCount, long likeCount, boolean liked, long bookmarkCount, boolean bookmarked) {
         return PostResponse.builder()
                 .id(post.getId())
                 .content(post.getContent())
@@ -50,6 +54,9 @@ public class PostResponse {
                 .profileImageUrl(post.getUser().getProfileImageUrl())
                 .likeCount(likeCount)
                 .commentCount(commentCount)
+                .liked(liked)
+                .bookmarkCount(bookmarkCount)
+                .bookmarked(bookmarked)
                 .build();
     }
 

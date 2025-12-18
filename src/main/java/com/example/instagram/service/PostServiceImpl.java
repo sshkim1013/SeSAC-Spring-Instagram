@@ -6,10 +6,11 @@ import com.example.instagram.entity.Post;
 import com.example.instagram.entity.User;
 import com.example.instagram.exception.BusinessException;
 import com.example.instagram.exception.ErrorCode;
+import com.example.instagram.repository.BookmarkRepository;
 import com.example.instagram.repository.CommentRepository;
 import com.example.instagram.repository.FollowRepository;
-import com.example.instagram.repository.LikeRepository;
 import com.example.instagram.repository.PostRepository;
+import com.example.instagram.repository.LikeRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,9 @@ public class PostServiceImpl implements PostService {
     private final CommentRepository commentRepository;
     private final FileService fileService;
     private final FollowRepository followRepository;
+    private final BookmarkRepository bookmarkRepository;
+    private final LikeService likeService;
+    private final BookmarkService bookmarkService;
 
     @Override
     @Transactional
@@ -96,7 +100,8 @@ public class PostServiceImpl implements PostService {
             .map(post -> {
                 long likeCount = likeRepository.countByPostId(post.getId());
                 long commentCount = commentRepository.countByPostId(post.getId());
-                return PostResponse.from(post, commentCount, likeCount);
+                long bookmarkCount = bookmarkRepository.countByPostId(post.getId());
+                return PostResponse.from(post, commentCount, likeCount, false, bookmarkCount, false);
             })
             .collect(Collectors.toList());
     }
@@ -109,7 +114,10 @@ public class PostServiceImpl implements PostService {
                 .map(post -> {
                     long likeCount = likeRepository.countByPostId(post.getId());
                     long commentCount = commentRepository.countByPostId(post.getId());
-                    return PostResponse.from(post, commentCount, likeCount);
+                    boolean liked = likeService.isLiked(post.getId(), userId);
+                    long bookmarkCount = bookmarkRepository.countByPostId(post.getId());
+                    boolean bookmarked = bookmarkService.isBookmarked(post.getId(), userId);
+                    return PostResponse.from(post, commentCount, likeCount, liked, bookmarkCount, bookmarked);
                 })
                 .toList();
 
@@ -123,8 +131,9 @@ public class PostServiceImpl implements PostService {
                 .map(post -> {
                     long likeCount = likeRepository.countByPostId(post.getId());
                     long commentCount = commentRepository.countByPostId(post.getId());
+                    long bookmarkCount = bookmarkRepository.countByPostId(post.getId());
 
-                    return PostResponse.from(post, commentCount, likeCount);
+                    return PostResponse.from(post, commentCount, likeCount, false, bookmarkCount, false);
                 })
                 .toList();
 
@@ -139,8 +148,9 @@ public class PostServiceImpl implements PostService {
                 .map(post -> {
                     long likeCount = likeRepository.countByPostId(post.getId());
                     long commentCount = commentRepository.countByPostId(post.getId());
+                    long bookmarkCount = bookmarkRepository.countByPostId(post.getId());
 
-                    return PostResponse.from(post, commentCount, likeCount);
+                    return PostResponse.from(post, commentCount, likeCount, false, bookmarkCount, false);
                 })
                 .toList();
 

@@ -1,12 +1,11 @@
 package com.example.instagram.service;
 
-import com.example.instagram.entity.Like;
+import com.example.instagram.entity.Bookmark;
 import com.example.instagram.entity.Post;
 import com.example.instagram.entity.User;
 import com.example.instagram.exception.BusinessException;
 import com.example.instagram.exception.ErrorCode;
-import com.example.instagram.repository.PostRepository;
-import com.example.instagram.repository.LikeRepository;
+import com.example.instagram.repository.BookmarkRepository;
 import com.example.instagram.repository.PostRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -16,43 +15,41 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class LikeServiceImpl implements LikeService {
+public class BookmarkServiceImpl implements BookmarkService {
 
-    private final LikeRepository likeRepository;
+    private final BookmarkRepository bookmarkRepository;
     private final PostRepository postRepository;
     private final UserService userService;
 
     @Transactional
     @Override
-    public void toggleLike(Long postId, Long userId) {
-        Optional<Like> existingLike = likeRepository.findByPostIdAndUserId(postId, userId);
+    public void toggleBookmark(Long postId, Long userId) {
+        Optional<Bookmark> existingBookmark = bookmarkRepository.findByPostIdAndUserId(postId, userId);
 
-        // 좋아요가 있으면
-        if (existingLike.isPresent()) {
-            likeRepository.delete(existingLike.get());
-        // 좋아요가 없으면
+        if (existingBookmark.isPresent()) {
+            bookmarkRepository.delete(existingBookmark.get());
         } else {
             Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.POST_NOT_FOUND));
             User user = userService.findById(userId);
 
-            Like like = Like.builder()
+            Bookmark bookmark = Bookmark.builder()
                 .post(post)
                 .user(user)
                 .build();
 
-            likeRepository.save(like);
+            bookmarkRepository.save(bookmark);
         }
     }
 
     @Override
-    public boolean isLiked(Long postId, Long userId) {
-        return likeRepository.existsByPostIdAndUserId(postId, userId);
+    public boolean isBookmarked(Long postId, Long userId) {
+        return bookmarkRepository.existsByPostIdAndUserId(postId, userId);
     }
 
     @Override
-    public long getLikeCount(Long postId) {
-        return likeRepository.countByPostId(postId);
+    public long getBookmarkCount(Long postId) {
+        return bookmarkRepository.countByPostId(postId);
     }
 
 }
